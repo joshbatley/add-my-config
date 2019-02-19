@@ -1,0 +1,36 @@
+{
+  "name": "add-my-config",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:jbatley/add-my-config.git",
+  "author": "Josh Batley <jbatley12@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "commander": "^2.19.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "*",
+    "@babel/core": "*",
+    "@babel/preset-env": "*",
+    "@babel/preset-react": "*",
+    "babel-eslint": "*",
+    "eslint": "*",
+    "eslint-config-airbnb": "*",
+    "eslint-config-react-app": "*",
+    "eslint-loader": "*",
+    "eslint-plugin-flowtype": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-jsx-a11y": "*",
+    "eslint-plugin-prettier": "*",
+    "eslint-plugin-react": "*",
+    "@types/node": "^11.9.4",
+    "concurrently": "^4.1.0"
+  },
+  "scripts": {
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
+    "serve-debug": "nodemon --inspect dist/index.js",
+    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
+  }
+}
