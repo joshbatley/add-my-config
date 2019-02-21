@@ -6,7 +6,7 @@
   "author": "Josh Batley <jbatley12@gmail.com>",
   "license": "MIT",
   "bin": {
-    "add-my-config": "./bin/index.js"
+    "add-my-config": "bin/index.js"
   },
   "dependencies": {
     "chalk": "^2.4.2",

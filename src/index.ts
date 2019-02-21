@@ -28,7 +28,7 @@ const useYarn =
   program.yarn && fs.existsSync(path.join(folder.dest, 'yarn.lock'));
 
 const usePackage =
-  fs.existsSync(path.join(folder.dest, 'package,json'))
+  fs.existsSync(path.join(folder.dest, 'package.json'))
 
 const command = useYarn ? 'yarn' : 'npm';
 const args = useYarn ? [] : ['i'];
