@@ -1,6 +1,6 @@
 {
   "name": "add-my-config",
-  "version": "1.0.4",
+  "version": "1.0.0",
   "main": "src/index.ts",
   "repository": "git@github.com:jbatley/add-my-config.git",
   "author": "Josh Batley <jbatley12@gmail.com>",
