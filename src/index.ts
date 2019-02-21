@@ -6,11 +6,6 @@ import chalk from 'chalk';
 import program from 'commander';
 import { spawnSync } from 'child_process';
 
-/**
- * TOOD:
- * - publish
- */
-
 program
   .version('1.0')
   .option('-s, --src [src]', 'Folder of the files to add project')
@@ -19,42 +14,31 @@ program
   .option('-ny, --no-yarn', 'prevent use of yarn and only use npm')
   .parse(process.argv);
 
-const homedir: string = os.homedir();
-
-const srcFolder: string = program.src
-  ? program.src
-  : path.join(homedir, '.my-config');
-
-const destFolder: string = program.dest ? program.dest : __dirname;
+const folder = {
+  package: () =>
+    fs.readFileSync(path.join(folder.dest, 'package.json'), 'utf8'),
+  src: program.src ? program.src : path.join(os.homedir(), '.my-config'),
+  dest: program.dest ? program.dest : __dirname,
+};
 
 const destFriendlyName = (folder: string) =>
   folder.split('/')[folder.split('/').length - 1];
 
-const destPackage = fs.readFileSync(path.join(destFolder, 'package.json'), 'utf8')
-
 const useYarn =
-  program.yarn && fs.existsSync(path.join(destFolder, 'yarn.lock'));
+  program.yarn && fs.existsSync(path.join(folder.dest, 'yarn.lock'));
 
-const errLog = (msg: string, err: Error | string) => {
-  if (err) {
-    console.log()
-    console.log(chalk.bgRed('   ERROR   '))
-    console.log(chalk.red(msg))
-    console.log()
-    console.log(err.toString())
-  }
-};
-const infoLog = (str: string) => str && console.log(chalk.blue(str));
-const successLog = (str: string) => str && console.log(chalk.green(str));
+const usePackage =
+  fs.existsSync(path.join(folder.dest, 'package,json'))
 
 const command = useYarn ? 'yarn' : 'npm';
 const args = useYarn ? [] : ['i'];
+const spawn = () => spawnSync(command, args, { stdio: 'inherit' });
 
 const formatData = (mergeData: any) => {
   let data: any;
   try {
-    data = JSON.parse(destPackage)
-    mergeData = JSON.parse(mergeData)
+    data = JSON.parse(folder.package());
+    mergeData = JSON.parse(mergeData);
     return JSON.stringify(
       Object.assign(
         {},
@@ -69,45 +53,62 @@ const formatData = (mergeData: any) => {
       2
     );
   } catch (err) {
-    errLog('Looks like we couldn\'t update your packages, make sure the file is valid and try again', err)
-    throw err
+    log.error(
+      "Looks like we couldn't update your packages, make sure the file is valid and try again",
+      err
+    );
+    throw err;
   }
 };
 
-const allDone = () => {
-  console.log();
-  successLog('All done files copied, enjoy your setup 😘');
-  console.log();
-}
+const log = {
+  finish: () => {
+    console.log();
+    log.success('All done files copied, enjoy your setup 😘');
+    console.log();
+  },
+  info: (str: string) => str && console.log(chalk.blue(str)),
+  success: (str: string) => str && console.log(chalk.green(str)),
+  error: (msg: string, err: Error | string) => {
+    if (err) {
+      console.log();
+      console.log(chalk.bgRed('   ERROR   '));
+      console.log(chalk.red(msg));
+      console.log();
+      console.log(err.toString());
+    }
+  },
+};
 
+const ignoredFiles: string[] = ['.DS_Store'];
 
-infoLog('Starting up')
-const files = fs.readdirSync(srcFolder);
+log.info('Starting up');
+const files = fs.readdirSync(folder.src);
 files.forEach((file) => {
-  const srcFile = path.join(srcFolder, file);
-  const destFile = path.join(destFolder, file);
-  if (file !== 'package.json') {
+  const srcFile = path.join(folder.src, file);
+  const destFile = path.join(folder.dest, file);
+  if (file !== 'package.json' && !ignoredFiles.includes(file)) {
     fs.copyFileSync(srcFile, destFile);
-    infoLog(
+    log.info(
       `- Copied ${file}${
         program.src ? ' from ' + program.src : ''
-      } to ${destFriendlyName(destFolder)}`
+      } to ${destFriendlyName(folder.dest)}`
     );
-  } else if (program.install) {
+  } else if (program.install && file === 'package.json' && usePackage) {
     const data = fs.readFileSync(srcFile, 'utf8');
-    console.log()
-    infoLog('Merging and updateing package.json');
+    console.log();
+    log.info('Merging and updateing package.json');
     try {
       fs.writeFileSync(
-        path.join(destFolder, 'package.json'),
-        formatData(data), 'utf8'
+        path.join(folder.src, 'package.json'),
+        formatData(data),
+        'utf8'
       );
-      spawnSync(command, args, { stdio: 'inherit' });
-      allDone();
+      spawn();
     } catch (err) {
-      throw err
+      throw err;
     }
-  } else {
-    allDone();
   }
 });
+
+log.finish();
