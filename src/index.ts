@@ -18,7 +18,7 @@ const folder = {
   package: () =>
     fs.readFileSync(path.join(folder.dest, 'package.json'), 'utf8'),
   src: program.src ? program.src : path.join(os.homedir(), '.my-config'),
-  dest: program.dest ? program.dest : __dirname,
+  dest: program.dest ? path.resolve(program.dest) : __dirname,
 };
 
 const destFriendlyName = (folder: string) =>
@@ -100,7 +100,7 @@ files.forEach((file) => {
     log.info('Merging and updateing package.json');
     try {
       fs.writeFileSync(
-        path.join(folder.src, 'package.json'),
+        path.join(folder.dest, 'package.json'),
         formatData(data),
         'utf8'
       );

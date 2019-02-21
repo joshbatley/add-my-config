@@ -20,11 +20,11 @@ commander_1.default
 const folder = {
     package: () => fs_1.default.readFileSync(path_1.default.join(folder.dest, 'package.json'), 'utf8'),
     src: commander_1.default.src ? commander_1.default.src : path_1.default.join(os_1.default.homedir(), '.my-config'),
-    dest: commander_1.default.dest ? commander_1.default.dest : __dirname,
+    dest: commander_1.default.dest ? path_1.default.resolve(commander_1.default.dest) : __dirname,
 };
 const destFriendlyName = (folder) => folder.split('/')[folder.split('/').length - 1];
 const useYarn = commander_1.default.yarn && fs_1.default.existsSync(path_1.default.join(folder.dest, 'yarn.lock'));
-const usePackage = fs_1.default.existsSync(path_1.default.join(folder.dest, 'package,json'));
+const usePackage = fs_1.default.existsSync(path_1.default.join(folder.dest, 'package.json'));
 const command = useYarn ? 'yarn' : 'npm';
 const args = useYarn ? [] : ['i'];
 const spawn = () => child_process_1.spawnSync(command, args, { stdio: 'inherit' });
@@ -77,7 +77,7 @@ files.forEach((file) => {
         console.log();
         log.info('Merging and updateing package.json');
         try {
-            fs_1.default.writeFileSync(path_1.default.join(folder.src, 'package.json'), formatData(data), 'utf8');
+            fs_1.default.writeFileSync(path_1.default.join(folder.dest, 'package.json'), formatData(data), 'utf8');
             spawn();
         }
         catch (err) {
@@ -86,4 +86,3 @@ files.forEach((file) => {
     }
 });
 log.finish();
-//# sourceMappingURL=index.js.map
