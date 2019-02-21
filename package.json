@@ -10,20 +10,6 @@
     "commander": "^2.19.0"
   },
   "devDependencies": {
-    "@babel/cli": "*",
-    "@babel/core": "*",
-    "@babel/preset-env": "*",
-    "@babel/preset-react": "*",
-    "babel-eslint": "*",
-    "eslint": "*",
-    "eslint-config-airbnb": "*",
-    "eslint-config-react-app": "*",
-    "eslint-loader": "*",
-    "eslint-plugin-flowtype": "*",
-    "eslint-plugin-import": "*",
-    "eslint-plugin-jsx-a11y": "*",
-    "eslint-plugin-prettier": "*",
-    "eslint-plugin-react": "*",
     "@types/node": "^11.9.4",
     "concurrently": "^4.1.0"
   },
