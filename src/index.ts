@@ -18,7 +18,7 @@ const folder = {
   package: () =>
     fs.readFileSync(path.join(folder.dest, 'package.json'), 'utf8'),
   src: program.src ? program.src : path.join(os.homedir(), '.my-config'),
-  dest: program.dest ? path.resolve(program.dest) : __dirname,
+  dest: program.dest ? path.resolve(program.dest) : path.resolve('./'),
 };
 
 const destFriendlyName = (folder: string) =>

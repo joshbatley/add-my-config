@@ -20,7 +20,7 @@ commander_1.default
 const folder = {
     package: () => fs_1.default.readFileSync(path_1.default.join(folder.dest, 'package.json'), 'utf8'),
     src: commander_1.default.src ? commander_1.default.src : path_1.default.join(os_1.default.homedir(), '.my-config'),
-    dest: commander_1.default.dest ? path_1.default.resolve(commander_1.default.dest) : __dirname,
+    dest: commander_1.default.dest ? path_1.default.resolve(commander_1.default.dest) : path_1.default.resolve('./'),
 };
 const destFriendlyName = (folder) => folder.split('/')[folder.split('/').length - 1];
 const useYarn = commander_1.default.yarn && fs_1.default.existsSync(path_1.default.join(folder.dest, 'yarn.lock'));
