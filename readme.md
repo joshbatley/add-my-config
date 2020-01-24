@@ -1,5 +1,7 @@
 # Add my config
 
+[![npm](https://img.shields.io/npm/v/add-my-config)](https://www.npmjs.com/package/add-my-config])
+
 To run `npx add-my-config`
 
 A simple app to add config files to a project, simple add a folder in your home directory name `.my-config` and place any file you want to import into any projects. for example `.editorconfig`.
